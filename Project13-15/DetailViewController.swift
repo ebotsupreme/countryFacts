@@ -9,10 +9,12 @@ import UIKit
 
 class DetailViewController: UITableViewController {
 
+    var details: Country?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        print("DetailsView details: \(details)")
     }
 
 
