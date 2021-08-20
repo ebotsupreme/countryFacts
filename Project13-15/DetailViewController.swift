@@ -13,6 +13,8 @@ class DetailViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "Details"
 
         print("DetailsView details: \(details)")
     }

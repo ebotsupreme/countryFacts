@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 class ViewController: UITableViewController {
     var countries = [Country]()
@@ -14,20 +15,9 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        countries.append(Country(name: "afganistan", capital: "kabul", region: "asia", population: 100000, flag: "https://restcountries.eu/data/afg.svg"))
-//        countries.append(Country(name: "usa", capital: "Washington DC", region: "america", population: 366000000, flag: "https://restcountries.eu/data/usa.svg"))
+        title = "Country Facts"
         
-        let urlString = "https://restcountries.eu/rest/v2/all"
-        
-        if let url = URL(string: urlString) {
-            if let data = try? Data(contentsOf: url) {
-                parse(json: data)
-            } else {
-                print("Failed to load countries.")
-            }
-        } else {
-            print("Failed to load url.")
-        }
+        fetchDataFromURL()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -50,20 +40,35 @@ class ViewController: UITableViewController {
         }
     }
     
+    func fetchDataFromURL() {
+        DispatchQueue.global().async { [weak self] in
+            let urlString = "https://restcountries.eu/rest/v2/all"
+            
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parse(json: data)
+                } else {
+                    print("Failed to load countries.")
+                }
+            } else {
+                print("Failed to load url.")
+            }
+        }
+        
+    }
+    
     func parse(json: Data) {
         let decoder = JSONDecoder()
         do {
             let jsonCountries = try decoder.decode([Country].self, from: json)
-            countries = jsonCountries
+            DispatchQueue.main.async { [weak self] in
+                self?.countries = jsonCountries
+                self?.tableView.reloadData()
+            }
+            
         } catch let error {
             print("Failed to decode countries \(error)")
         }
-//
-//        if let jsonCountries = try? decoder.decode([Country].self, from: json) {
-//            countries = jsonCountries
-//        } else {
-//            print("Failed to load countries.")
-//        }
     }
 
 }
