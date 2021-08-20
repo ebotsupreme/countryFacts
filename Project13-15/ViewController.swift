@@ -14,8 +14,8 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        countries.append(Country(name: "afganistan", capital: "kabul", region: "asia", population: 100000, flag: "https://restcountries.eu/data/afg.svg"))
-        countries.append(Country(name: "usa", capital: "Washington DC", region: "america", population: 366000000, flag: "https://restcountries.eu/data/usa.svg"))
+//        countries.append(Country(name: "afganistan", capital: "kabul", region: "asia", population: 100000, flag: "https://restcountries.eu/data/afg.svg"))
+//        countries.append(Country(name: "usa", capital: "Washington DC", region: "america", population: 366000000, flag: "https://restcountries.eu/data/usa.svg"))
         
         let urlString = "https://restcountries.eu/rest/v2/all"
         
@@ -52,11 +52,18 @@ class ViewController: UITableViewController {
     
     func parse(json: Data) {
         let decoder = JSONDecoder()
-        if let jsonCountries = try? decoder.decode([Country].self, from: json) {
+        do {
+            let jsonCountries = try decoder.decode([Country].self, from: json)
             countries = jsonCountries
-        } else {
-            print("Failed to load countries.")
+        } catch let error {
+            print("Failed to decode countries \(error)")
         }
+//
+//        if let jsonCountries = try? decoder.decode([Country].self, from: json) {
+//            countries = jsonCountries
+//        } else {
+//            print("Failed to load countries.")
+//        }
     }
 
 }

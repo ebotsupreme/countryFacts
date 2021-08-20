@@ -12,8 +12,21 @@ struct Country: Codable {
     let capital: String
     let region: String
     let population: Int
-//    let timezones: [String]
-//    let currencies: [String]
-//    let languages: [String]
+    let timezones: [String]
+    let currencies: [Currency]
+    let languages: [Language]
     let flag: String
+    
+    struct Currency: Codable {
+        let code: String?
+        let name: String?
+        let symbol: String?
+    }
+    
+    struct Language: Codable {
+        let iso639_1: String?
+        let iso639_2: String
+        let name: String
+        let nativeName: String
+    }
 }
