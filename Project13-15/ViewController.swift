@@ -7,11 +7,27 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UITableViewController {
+    var countries = [Country]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        countries.append(Country(name: "afganistan", capital: "kabul", region: "asia", population: 100000, flag: "https://restcountries.eu/data/afg.svg"))
+        countries.append(Country(name: "usa", capital: "Washington DC", region: "america", population: 366000000, flag: "https://restcountries.eu/data/usa.svg"))
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return countries.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Country", for: indexPath)
+        let country = countries[indexPath.row]
+        cell.textLabel?.text = country.name
+        
+        return cell
     }
 
 
