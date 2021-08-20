@@ -16,6 +16,18 @@ class ViewController: UITableViewController {
         
         countries.append(Country(name: "afganistan", capital: "kabul", region: "asia", population: 100000, flag: "https://restcountries.eu/data/afg.svg"))
         countries.append(Country(name: "usa", capital: "Washington DC", region: "america", population: 366000000, flag: "https://restcountries.eu/data/usa.svg"))
+        
+        let urlString = "https://restcountries.eu/rest/v2/all"
+        
+        if let url = URL(string: urlString) {
+            if let data = try? Data(contentsOf: url) {
+                parse(json: data)
+            } else {
+                print("Failed to load countries.")
+            }
+        } else {
+            print("Failed to load url.")
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,12 +45,19 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
             let country = countries[indexPath.row]
-            print(country)
             vc.details = country
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-
+    
+    func parse(json: Data) {
+        let decoder = JSONDecoder()
+        if let jsonCountries = try? decoder.decode([Country].self, from: json) {
+            countries = jsonCountries
+        } else {
+            print("Failed to load countries.")
+        }
+    }
 
 }
 
