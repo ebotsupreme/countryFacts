@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 class DetailViewController: UIViewController {
     @IBOutlet var nameLabel: UILabel!
@@ -37,6 +38,14 @@ class DetailViewController: UIViewController {
             timezoneLabel.text = country.timezones[0]
             currencyLabel.text = country.currencies[0].name
             languageLabel.text = country.languages[0].name
+            
+            let path = country.flag
+            let webView = WKWebView(frame: flagImageView.bounds)
+            let request = URLRequest(url: URL(string: path)!)
+            webView.load(request)
+            flagImageView.layer.borderWidth = 2
+            flagImageView.layer.borderColor = UIColor.gray.cgColor
+            flagImageView.addSubview(webView)
         }
     }
 
